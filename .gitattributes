@@ -1,0 +1,29 @@
+# Normalize text files in the Git repository
+* text=auto
+
+# Source code and project documentation
+*.py  text eol=lf
+*.md  text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+
+# Windows scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.wav binary
+*.mp3 binary
+*.onnx binary
+*.bin binary
+*.zip binary
