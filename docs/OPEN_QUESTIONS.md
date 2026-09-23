@@ -22,6 +22,15 @@ These are intentionally unresolved. Do not silently invent answers.
     "Aurora normalis buka." Earlier isolated BuzzASR testing of the
     same WAV returned "Аурора намали звука". Validate with more
     independent recordings before changing resolver thresholds or routing.
+    On the separate 3.70 s live capture
+    aurora_20260923_234840_331887.wav, CTC again resolved MIXED
+    (entropy delta +0.040802). Whisper AUTO detected `ru` with
+    probability 0.323974609375 and transcribed
+    "Аурора на малозвуке."; forced Whisper BG returned
+    "Аурора на малезвука."; forced Buzz BG returned
+    "А у Рора намали звука". This isolates a failure of the current
+    MIXED/Whisper path for this recording, but does not validate a
+    replacement routing rule or new CTC thresholds.
 15. Production Resource Manager policy, budgets and gaming behavior.
 16. Exact split of Android-local vs server-side functionality after integration.
 17. Profile/preferences synchronization across multiple devices.

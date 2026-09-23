@@ -62,7 +62,9 @@ class TimedEvidenceProvider:
         start = time.perf_counter()
 
         try:
-            return self.provider.analyze_file(audio_path)
+            evidence = self.provider.analyze_file(audio_path)
+            self.last_evidence = evidence
+            return evidence
         finally:
             self.last_seconds = (
                 time.perf_counter() - start
@@ -133,6 +135,19 @@ def run_case(
     total_seconds = time.perf_counter() - start
 
     resolution = resolver.last_resolution
+    evidence = evidence_provider.last_evidence
+
+    print(
+        f"CTC entropy: BG={evidence.bulgarian.non_blank_entropy:.6f}, "
+        f"EN={evidence.english.non_blank_entropy:.6f}, "
+        f"delta={evidence.entropy_delta:.6f}",
+        flush=True,
+    )
+    print(
+        f"CTC boundaries: BG <= {resolver.resolver.CTC_BG_BOUNDARY:.3f}, "
+        f"EN >= {resolver.resolver.CTC_EN_BOUNDARY:.3f}",
+        flush=True,
+    )
 
     print(f"\n--- {label} ---", flush=True)
     print(
@@ -163,6 +178,19 @@ def run_case(
     print(
         f"Resolution reason: "
         f"{resolution.reason!r}",
+        flush=True,
+    )
+    print(
+        f"STT engine: {result.engine!r}; model: {result.model!r}",
+        flush=True,
+    )
+    print(
+        f"STT language: {result.language!r}; "
+        f"confidence: {result.language_confidence!r}",
+        flush=True,
+    )
+    print(
+        f"STT metadata: {result.metadata!r}",
         flush=True,
     )
     print(

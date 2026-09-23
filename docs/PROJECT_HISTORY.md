@@ -129,3 +129,22 @@ AuroraCapture WAV. It does not verify callback-to-SttService
 integration in one process, reliable wake detection, correct Bulgarian
 command recognition, command-only extraction, or assistant actions.
 The language thresholds are not changed based on this single sample.
+
+Follow-up diagnostics on the same live WAV:
+- Repeated SttService run: CTC BG entropy 0.079617, EN entropy
+  0.038815, delta +0.040802. Resolver boundaries: BG <= 0.003,
+  EN >= 0.043; the result remains MIXED.
+- Whisper large-v3 in MIXED mode (`language=None`) detected Russian
+  (`ru`) with language probability 0.323974609375 and returned
+  "Аурора на малозвуке." The measured SttService time was 2.873 s
+  (CTC 1.596 s; router 1.277 s).
+- Isolated Whisper large-v3 with forced `language="bg"` returned
+  "Аурора на малезвука." (0.962 s inference).
+- Isolated BuzzASR/bulgarian with forced `language="bg"` returned
+  "А у Рора намали звука" (0.55 s inference). The command words
+  were recognized, although the wake name was split.
+
+For this WAV, forcing Bulgarian in Whisper does not recover the
+command, whereas Buzz BG recognizes the command words. These
+diagnostics do not establish a general MIXED routing policy. No
+production resolver thresholds, routing, or assistant actions changed.
