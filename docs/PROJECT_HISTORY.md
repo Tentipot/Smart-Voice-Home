@@ -95,3 +95,37 @@ The initial live diagnostic will capture one phrase and terminate its
 process before STT models are loaded in a separate process, avoiding
 simultaneous wake and STT model residency on the 8 GiB GPU.
 No assistant actions will be executed.
+
+## 16. Live AuroraCapture WAV through SttService — 2026-09-23
+
+A separate-process diagnostic captures the spoken Bulgarian phrase
+"Аурора, намали звука" using diagnose_live_aurora_capture.py.
+AuroraCapture detects the wake word and saves a 3.70 s, 16 kHz PCM16
+recording with RMS 0.0316:
+
+`data/command_capture/live_stt_diagnostic/aurora_20260923_234840_331887.wav`
+
+The preliminary wake ASR text is "Аурора на малюс". After the capture
+process exits, diagnose_captured_phrase_stt.py is run with its new
+optional --audio argument to process this WAV once through SttService.
+The default four-case BG/EN diagnostic remains available.
+
+Measured STT results:
+- CTC CPU: 1.578 s.
+- LanguageResolver: 0.000028 s.
+- STT via router: 1.632 s.
+- Total SttService: 3.211 s.
+- Resolved mode: MIXED; reason: CTC_AMBIGUOUS_EVIDENCE.
+- Final transcript: "Аурора на малозвуке." (incorrect).
+- VRAM: 1085 MB baseline, 6333 MB after model loading,
+  6415 MB after the case and after cleanup.
+
+The diagnostic reports unloading all three model resources, but VRAM
+does not decrease before process exit. In-process GPU memory
+reclamation is not established by this test.
+
+This verifies offline SttService processing of a newly captured live
+AuroraCapture WAV. It does not verify callback-to-SttService
+integration in one process, reliable wake detection, correct Bulgarian
+command recognition, command-only extraction, or assistant actions.
+The language thresholds are not changed based on this single sample.

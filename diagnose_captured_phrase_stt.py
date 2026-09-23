@@ -1,3 +1,4 @@
+import argparse
 import gc
 import time
 from pathlib import Path
@@ -173,10 +174,27 @@ def run_case(
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--audio",
+        type=Path,
+        help="Run one STT case on the specified WAV file.",
+    )
+    args = parser.parse_args()
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA is unavailable.")
 
-    for audio_path in (BG_AUDIO, EN_AUDIO):
+    if args.audio is not None:
+        cases = (("Live capture", args.audio),)
+    else:
+        cases = (
+            ("BG first", BG_AUDIO),
+            ("EN first", EN_AUDIO),
+            ("BG warm", BG_AUDIO),
+            ("EN warm", EN_AUDIO),
+        )
+
+    for _, audio_path in cases:
         if not audio_path.is_file():
             raise FileNotFoundError(audio_path)
 
@@ -276,12 +294,7 @@ def main():
             router=router,
         )
 
-        for label, audio_path in (
-            ("BG first", BG_AUDIO),
-            ("EN first", EN_AUDIO),
-            ("BG warm", BG_AUDIO),
-            ("EN warm", EN_AUDIO),
-        ):
+        for label, audio_path in cases:
             run_case(
                 label,
                 audio_path,

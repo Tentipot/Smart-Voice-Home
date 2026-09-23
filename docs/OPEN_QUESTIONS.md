@@ -43,7 +43,11 @@ These are intentionally unresolved. Do not silently invent answers.
     AuroraCapture WAVs using diagnose_captured_phrase_stt.py:
     BG resolved MIXED with incorrect transcript; EN resolved EN
     with transcript "Aurora turn down the volume."
-    Live AuroraCapture callback → SttService integration remains untested.
+    A new live AuroraCapture WAV was replayed through SttService in
+    a separate process: BG resolved MIXED with incorrect transcript
+    "Аурора на малозвуке." (3.211 s total SttService time).
+    Live AuroraCapture callback → SttService integration in one
+    process remains untested.
 
 25. Command-only audio extraction and precise wake-word boundary,
     if required by the final command-processing design.
