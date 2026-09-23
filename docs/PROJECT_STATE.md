@@ -1,5 +1,5 @@
 # Smart voice home — PROJECT STATE
-Updated: 2026-09-22
+Updated: 2026-09-23
 
 ## Development status
 Feature development is temporarily paused for architecture/history reconstruction after the long chat context became unreliable.
@@ -81,6 +81,48 @@ Not yet proven as a complete global scheduler:
 ## Server integration gap
 `SttService` existing in source does not prove full production composition.
 `app/main.py` does not yet prove a complete production `/stt` endpoint.
+
+
+## AuroraCapture functional verification — 2026-09-23
+
+Status: functionally verified for two live microphone test cases.
+
+Confirmed:
+- continuous utterance of wake word followed by a command, without
+  requiring a deliberate pause between them;
+- pre-roll buffering and capture of the complete phrase;
+- WebRTC VAD phrase start and automatic ending;
+- wake detection in Bulgarian and English test cases;
+- delivery of `CapturedPhrase` containing the full audio blocks;
+- pause before collector review, WAV playback, manual acceptance and
+  subsequent capture resumption.
+
+Accepted recordings:
+- `data/language_dataset/bg_001_20260923_212640_017014.wav`
+  — "Аурора, намали звука";
+- `data/language_dataset/en_002_20260923_212654_840062.wav`
+  — "Aurora, turn down the volume".
+
+The isolated wake-word WAVs from 2026-09-20 were also successfully
+recognized by Whisper large-v3 on CUDA during this verification.
+
+Limitations:
+- this is a functional test, not a measured wake-detection reliability
+  benchmark across speakers, noise conditions or larger datasets;
+- `wake_text` is preliminary wake-detection ASR output, not the final
+  command transcript;
+- command-only extraction and the connection from `AuroraCapture` to
+  `SttService` have not been verified end-to-end;
+- no real assistant actions were executed.
+
+CUDA dependency finding:
+- `cublas64_12.dll` exists and loads successfully by full path;
+- CTranslate2 CUDA inference works when NVIDIA DLL directories are
+  prepended to PATH before Python starts;
+- a permanent project-level DLL discovery fix is still required.
+
+See `docs/AUDIO_DATASETS.md` for the audio inventory and dataset
+boundaries.
 
 ## Immediate technical continuation point
 When development resumes:

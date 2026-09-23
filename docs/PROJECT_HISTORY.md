@@ -1,5 +1,5 @@
 # Smart voice home — PROJECT HISTORY
-Updated: 2026-09-22
+Updated: 2026-09-23
 
 ## 1. Origin — offline Bulgarian STT
 The project begins on 2026-08-29 as a search for a free offline Bulgarian voice-recognition solution for a software project.
@@ -51,3 +51,31 @@ A dedicated 40-WAV BG/EN dataset is manually reviewed and used to calibrate the 
 On 2026-09-22 development pauses because the long chat no longer provides trustworthy complete historical context. A forensic source snapshot and then the full `VoiceAssistant_ChatLOG.txt` are used to reconstruct project history and architecture.
 
 The official ChatGPT export remains useful as an independent completeness check when it arrives.
+
+## 14. AuroraCapture functional verification — 2026-09-23
+
+A live microphone test verifies the basic Aurora wake-word capture path
+with one Bulgarian and one English utterance.
+
+The user speaks the wake word and command continuously, without an
+intentional pause. AuroraCapture retains pre-roll audio, uses WebRTC VAD
+to detect the phrase boundaries, recognizes the wake word and delivers
+the complete captured phrase.
+
+Both recordings are played back and manually accepted:
+- `data/language_dataset/bg_001_20260923_212640_017014.wav`
+- `data/language_dataset/en_002_20260923_212654_840062.wav`
+
+Two earlier isolated wake-word recordings are also successfully
+recognized using Whisper large-v3 on CUDA.
+
+This checkpoint establishes basic functional operation, not production
+wake-detection reliability. Final command STT and real assistant actions
+are outside the scope of this test.
+
+A CUDA dependency issue is identified: CTranslate2 inference works
+when the NVIDIA DLL directories are added to PATH before Python starts.
+A permanent startup fix remains open.
+
+The audio dataset inventory and its validation boundaries are recorded
+in `docs/AUDIO_DATASETS.md`.

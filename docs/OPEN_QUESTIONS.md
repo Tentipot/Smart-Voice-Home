@@ -1,5 +1,5 @@
 # Smart voice home — OPEN QUESTIONS
-Updated: 2026-09-22
+Updated: 2026-09-23
 
 These are intentionally unresolved. Do not silently invent answers.
 
@@ -25,3 +25,25 @@ These are intentionally unresolved. Do not silently invent answers.
 20. Backup/restore/versioning strategy for server configuration, users and integrations.
 21. Full re-audit of Android source and Spotify implementation against current platform design.
 22. Reconciliation of this reconstruction with the official ChatGPT export when received.
+
+23. Permanent CUDA DLL discovery for CTranslate2/Whisper on Windows.
+    Current verified workaround: prepend the installed NVIDIA DLL
+    directories to PATH before starting Python.
+
+24. End-to-end integration of AuroraCapture with SttService:
+    full captured phrase → language evidence → resolver → STT router
+    → final command transcript. No real assistant actions during
+    initial integration diagnostics.
+
+25. Command-only audio extraction and precise wake-word boundary,
+    if required by the final command-processing design.
+
+26. Wake-detection reliability validation across speakers, noise
+    conditions and a larger BG/EN command dataset. The two accepted
+    live recordings establish functional operation only.
+
+27. Separation of preliminary wake-detection ASR text/language labels
+    from final command transcription and language routing.
+
+28. Preservation and backup of local audio datasets under data/,
+    which is excluded from Git. See docs/AUDIO_DATASETS.md.
