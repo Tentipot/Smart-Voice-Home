@@ -17,6 +17,11 @@ These are intentionally unresolved. Do not silently invent answers.
 12. Production `/stt` endpoint and streaming protocol.
 13. Independent validation dataset for CTC resolver thresholds.
 14. MIXED fallback quality, especially Bulgarian/mixed speech.
+    Real AuroraCapture BG sample bg_001_20260923_212640_017014.wav:
+    CTC resolved MIXED (CTC_AMBIGUOUS_EVIDENCE); Whisper returned
+    "Aurora normalis buka." Earlier isolated BuzzASR testing of the
+    same WAV returned "Аурора намали звука". Validate with more
+    independent recordings before changing resolver thresholds or routing.
 15. Production Resource Manager policy, budgets and gaming behavior.
 16. Exact split of Android-local vs server-side functionality after integration.
 17. Profile/preferences synchronization across multiple devices.
@@ -34,6 +39,11 @@ These are intentionally unresolved. Do not silently invent answers.
     full captured phrase → language evidence → resolver → STT router
     → final command transcript. No real assistant actions during
     initial integration diagnostics.
+    Offline replay through SttService verified for two accepted
+    AuroraCapture WAVs using diagnose_captured_phrase_stt.py:
+    BG resolved MIXED with incorrect transcript; EN resolved EN
+    with transcript "Aurora turn down the volume."
+    Live AuroraCapture callback → SttService integration remains untested.
 
 25. Command-only audio extraction and precise wake-word boundary,
     if required by the final command-processing design.
