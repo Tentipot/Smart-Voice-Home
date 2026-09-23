@@ -79,3 +79,19 @@ A permanent startup fix remains open.
 
 The audio dataset inventory and its validation boundaries are recorded
 in `docs/AUDIO_DATASETS.md`.
+
+## 15. Retired STT diagnostic script — 2026-09-23
+
+Removed `diagnose_full_stt_pipeline.py` to avoid confusion with the
+current STT diagnostic path. The retired script had missing imports,
+loaded CTC models on CUDA, and routed directly through SttRouter
+instead of exercising SttService.
+
+The verified offline diagnostic for accepted AuroraCapture recordings
+is `diagnose_captured_phrase_stt.py`.
+
+Live AuroraCapture callback-to-SttService integration remains untested.
+The initial live diagnostic will capture one phrase and terminate its
+process before STT models are loaded in a separate process, avoiding
+simultaneous wake and STT model residency on the 8 GiB GPU.
+No assistant actions will be executed.
