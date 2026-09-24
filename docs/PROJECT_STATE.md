@@ -1,8 +1,11 @@
 # Smart voice home — PROJECT STATE
-Updated: 2026-09-23
+Updated: 2026-09-25
 
 ## Development status
-Feature development is temporarily paused for architecture/history reconstruction after the long chat context became unreliable.
+След документалния етап потребителят разреши продължаване на разработката.
+Добавен е отделен validation collector; проверен е с тестове без хардуер.
+Първата жива collector проверка е приета: BG01, 5.50 s, Trust GXT 232,
+с прослушване и повторно прослушване. Финален STT върху този WAV не е изпълнен.
 
 ## Android lineage
 Historical Android MVP evidence supports:
@@ -72,7 +75,7 @@ Implemented concepts:
 - backend cleanup;
 - concurrency/lifecycle tests.
 
-Not yet proven as a complete global scheduler:
+Planned, not implemented in the current ModelManager:
 - automatic VRAM budgeting;
 - LRU eviction;
 - full gaming-aware policy;
@@ -80,7 +83,8 @@ Not yet proven as a complete global scheduler:
 
 ## Server integration gap
 `SttService` existing in source does not prove full production composition.
-`app/main.py` does not yet prove a complete production `/stt` endpoint.
+`app/main.py` exposes `/health` and `/status` only. Production `/stt`,
+`/tts`, `/command` and streaming integration remain planned.
 
 
 ## AuroraCapture functional verification — 2026-09-23
@@ -124,11 +128,46 @@ CUDA dependency finding:
 See `docs/AUDIO_DATASETS.md` for the audio inventory and dataset
 boundaries.
 
-## Immediate technical continuation point
-When development resumes:
-1. validate end-to-end SttService WAV → evidence → resolver → router → transcript;
-2. inspect transcription quality, especially MIXED;
-3. monitor resource behavior;
-4. avoid executing real assistant actions during diagnostics.
+## Обработка на AuroraCapture WAV през SttService — резултати от 2026-09-23
 
-Architecture reconciliation should be completed before large cross-system changes.
+Диагностично проверено в отделен процес чрез `diagnose_captured_phrase_stt.py`:
+- Приетият BG запис от 23 септември е класифициран като MIXED и получава
+  грешна транскрипция: "Aurora normalis buka.".
+- Приетият EN запис е класифициран като EN и връща
+  "Aurora turn down the volume.".
+- Новият 3.70 s запис
+  `data/command_capture/live_stt_diagnostic/aurora_20260923_234840_331887.wav`
+  преминава през цялата WAV → evidence → resolver → router → transcript
+  верига за 3.211 s, но връща грешното "Аурора на малозвуке.".
+- Последващата диагностика на същия WAV отчита entropy delta +0.040802,
+  MIXED и Whisper AUTO език `ru`. Принудителният Whisper BG също греши;
+  Buzz BG връща "А у Рора намали звука" и разпознава командните думи.
+- Отчетената VRAM остава 6415 MB след cleanup; освобождаване на GPU паметта
+  в същия процес не е доказано. Причината не е окончателно установена.
+
+Това са вече документираните резултати в [PROJECT_HISTORY.md](PROJECT_HISTORY.md),
+раздел 16, и [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md), точки 14 и 24;
+не са нови измервания от настоящия документален етап.
+Живата callback интеграция AuroraCapture → SttService в един процес,
+общата надеждност и правилното BG/MIXED разпознаване остават непотвърдени.
+Не са изпълнявани реални асистентски действия.
+
+## Точка за продължаване
+
+Предложената следваща техническа задача е независима оценка на BG/EN/MIXED
+разпознаването с текущите компоненти, преди промяна на прагове или routing.
+Подготвен е [STT_VALIDATION_PLAN.md](STT_VALIDATION_PLAN.md) с 24 предложени
+фрази, правила за независимост, референции и оценяване. Нови записи и
+измервания не са направени; production критерии за качество и време
+още не са договорени. `collect_stt_validation.py` вече реализира отделен
+collector с прослушване, приемане и manifest. Всички 24 фрази са приети;
+един MX04 опит е отхвърлен и заменен с повторен запис. Този етап не променя
+STT политиката. Финален STT анализ предстои.
+
+Следваща интеграционна задача е живата AuroraCapture → SttService връзка
+с проверка на ресурсите. CUDA DLL discovery и освобождаването на VRAM
+остават отворени. Първоначалните диагностики не изпълняват реални действия.
+
+Предоставените исторически материали и ограниченията на схемите са описани
+в [EVIDENCE_MAP.md](EVIDENCE_MAP.md). Първоначалната съпоставка не е
+изчерпателен одит на всички реплики и не затваря отворените архитектурни въпроси.
