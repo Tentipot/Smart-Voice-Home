@@ -1,5 +1,6 @@
 import time
 import wave
+import os
 from pathlib import Path
 
 import numpy as np
@@ -20,27 +21,34 @@ class BuzzAsrSttEngine(SttEngine):
 
     def __init__(
         self,
-        model_name: str = "BuzzASR/bulgarian",
+        model_name: str | None = None,
         *,
         device: str = "cuda",
         dtype: torch.dtype = torch.float16,
     ) -> None:
-        self._model_name = model_name
+        configured_name = model_name or os.getenv(
+            "SMART_VOICE_BUZZASR_MODEL",
+            "BuzzASR/bulgarian",
+        )
+        self._model_name = configured_name
+        local_files_only = Path(configured_name).is_dir()
         self._device = device
         self._dtype = dtype
 
         load_start = time.perf_counter()
 
         self._processor = AutoProcessor.from_pretrained(
-            model_name,
+            configured_name,
+            local_files_only=local_files_only,
         )
 
         self._model = (
             AutoModelForSpeechSeq2Seq.from_pretrained(
-                model_name,
+                configured_name,
                 dtype=dtype,
                 low_cpu_mem_usage=True,
                 use_safetensors=True,
+                local_files_only=local_files_only,
             )
         )
 

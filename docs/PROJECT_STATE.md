@@ -171,3 +171,13 @@ STT политиката. Финален STT анализ предстои.
 Предоставените исторически материали и ограниченията на схемите са описани
 в [EVIDENCE_MAP.md](EVIDENCE_MAP.md). Първоначалната съпоставка не е
 изчерпателен одит на всички реплики и не затваря отворените архитектурни въпроси.
+
+## Локален model set и offline подготовка — 2026-09-25
+
+Изтеглени са локално всички модели за текущия STT validation маршрут:
+BuzzASR Bulgarian, български и английски CTC модели и
+`faster-whisper-large-v3`. Директориите са под `models/`, извън Git и backup.
+STT компонентите приемат локални пътища чрез `SMART_VOICE_BUZZASR_MODEL`,
+`SMART_VOICE_CTC_BG_MODEL`, `SMART_VOICE_CTC_EN_MODEL` и
+`SMART_VOICE_WHISPER_MODEL`; при локална директория се използва
+`local_files_only=True`. Пълният WER/latency отчет още не е наличен.

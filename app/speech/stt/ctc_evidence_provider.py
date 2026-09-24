@@ -1,4 +1,5 @@
 import math
+import os
 import wave
 from pathlib import Path
 
@@ -45,13 +46,13 @@ class CtcLanguageEvidenceProvider:
 
     def __init__(
         self,
-        bg_model_name: str = DEFAULT_BG_MODEL_NAME,
-        en_model_name: str = DEFAULT_EN_MODEL_NAME,
+        bg_model_name: str | None = None,
+        en_model_name: str | None = None,
         device: str = "cuda",
         dtype: torch.dtype = torch.float16,
     ) -> None:
-        self._bg_model_name = bg_model_name
-        self._en_model_name = en_model_name
+        self._bg_model_name = bg_model_name or os.getenv("SMART_VOICE_CTC_BG_MODEL", DEFAULT_BG_MODEL_NAME)
+        self._en_model_name = en_model_name or os.getenv("SMART_VOICE_CTC_EN_MODEL", DEFAULT_EN_MODEL_NAME)
         self._device = device
         self._dtype = dtype
 
@@ -127,13 +128,13 @@ class CtcLanguageEvidenceProvider:
     ]:
         feature_extractor = (
             Wav2Vec2FeatureExtractor.from_pretrained(
-                model_name
+                model_name, local_files_only=Path(model_name).is_dir()
             )
         )
 
         tokenizer = (
             Wav2Vec2CTCTokenizer.from_pretrained(
-                model_name
+                model_name, local_files_only=Path(model_name).is_dir()
             )
         )
 
@@ -141,6 +142,7 @@ class CtcLanguageEvidenceProvider:
             model_name,
             dtype=self._dtype,
             low_cpu_mem_usage=True,
+            local_files_only=Path(model_name).is_dir(),
         )
 
         model.to(self._device)

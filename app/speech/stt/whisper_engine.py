@@ -1,5 +1,6 @@
 
 import time
+import os
 import wave
 from pathlib import Path
 
@@ -20,13 +21,13 @@ class WhisperSttEngine(SttEngine):
 
     def __init__(
         self,
-        model_name: str = "large-v3",
+        model_name: str | None = None,
         *,
         device: str = "cuda",
         compute_type: str = "float16",
         beam_size: int = 5,
     ) -> None:
-        self._model_name = model_name
+        self._model_name = model_name or os.getenv("SMART_VOICE_WHISPER_MODEL", "large-v3")
         self._device = device
         self._compute_type = compute_type
         self._beam_size = beam_size
@@ -37,7 +38,7 @@ class WhisperSttEngine(SttEngine):
         load_start = time.perf_counter()
 
         self._model = WhisperModel(
-            model_name,
+            self._model_name,
             device=device,
             compute_type=compute_type,
         )
