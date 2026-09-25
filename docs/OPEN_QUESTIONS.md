@@ -3,6 +3,19 @@ Updated: 2026-09-23
 
 These are intentionally unresolved. Do not silently invent answers.
 
+Допълнително възстановени механизми и оставащи неизвестни:
+[STT_HISTORY_MECHANISMS_AUDIT.md](STT_HISTORY_MECHANISMS_AUDIT.md).
+CTC+LM, grammar/context и каскадните предложения не са потвърдени като
+един общ приет дизайн. Старо предложение за MIXED отказ се различава от
+последващия/текущ код; не въвеждай отказ само въз основа на старата реплика.
+
+Приоритет за продължаване: [историческият STT checkpoint](STT_HISTORY_CHECKPOINT.md).
+Кои допълнителни механизми към speech masking / temporal evidence /
+smoothing / STT candidates са обсъждани, проверени, одобрени или заменени?
+Потребителят изрично помни още механизми; съдържанието им предстои да се
+възстанови. Не приемай наличната схема за пълна и не започвай автоматично
+поредния моделeн тест по старите предложения по-долу.
+
 1. Exact arbitration when multiple devices hear the same wake phrase/command.
 2. Final authentication/token/device-registration protocol.
 3. Final user/device/home/permission database schema.
@@ -70,3 +83,11 @@ These are intentionally unresolved. Do not silently invent answers.
 
 28. Preservation and backup of local audio datasets under data/,
     which is excluded from Git. See docs/AUDIO_DATASETS.md.
+
+29. Разширеният pilot_01 показва BG маршрут за 5/8 MIXED фрази.
+    Директен Whisper AUTO върху 8/8 MIXED записа подобрява три случая,
+    влошава два (MX04 критично) и оставя три непроменени. Вж.
+    MIXED_WHISPER_AUTO_COMPARISON.md; предложено е forced BG/EN сравнение.
+    Следва анализ без автоматична промяна на праговете. Необходими са
+    пълен ръчен semantic checklist, model revisions/dependency snapshot
+    и проверка на offline режима извън batch runner-а.

@@ -20,8 +20,29 @@ Recommended reading order:
 8. EVIDENCE_MAP.md
 9. Smart_voice_home_FULL_LOG_RECONSTRUCTION.md
 
-Подготовка за следващата диагностика:
+[Одит на схемите](STT_SCHEMES_AUDIT.md) проследява отсяването преди/след
+STT и разликите с capture, ресурси, media и permissions.
+[Индексът](HISTORY_SCHEMES_INDEX.md) дава директни места в целия текстов лог.
+
+Текуща точка за продължаване: **по-дълбок исторически одит преди нови STT
+експерименти**. За всяка STT/MIXED задача първо прочети
+[STT_HISTORY_CHECKPOINT.md](STT_HISTORY_CHECKPOINT.md): проверени находки,
+корекции, конкретни редове в лога и оставащи исторически следи.
+Схемата за времеви езиков анализ още не е възстановена изчерпателно.
+Продължение: [одит на STT механизмите](STT_HISTORY_MECHANISMS_AUDIT.md) —
+CTC+LM, grammar/context, каскади и разлики между предложенията и текущия код.
+
+Налични диагностични материали (не автоматичен план за следваща задача):
 [STT_VALIDATION_PLAN.md](STT_VALIDATION_PLAN.md) — предложен пилот с нови
-BG/EN/MIXED записи, референции и показатели; изпълнението предстои.
+BG/EN/MIXED записи, референции и показатели. Първият baseline е в
+[STT_VALIDATION_PILOT_01_RESULTS.md](STT_VALIDATION_PILOT_01_RESULTS.md).
+Разширеният runner записва отделно CTC, route/reason, времена и VRAM;
+смисловата оценка на командите остава ръчна.
+
+[MIXED_WHISPER_MODES.md](MIXED_WHISPER_MODES.md) — BG/EN/multilingual
+резултати, исторически Canary тест и резервното продуктово предложение.
+
+[MIXED_WHISPER_AUTO_COMPARISON.md](MIXED_WHISPER_AUTO_COMPARISON.md) —
+директно Whisper AUTO сравнение, включително критичното обръщане при MX04.
 
 This package preserves the previous HISTORY archive contents and adds the structured project-memory documents above.

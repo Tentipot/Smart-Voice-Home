@@ -10,7 +10,7 @@ Playback сигналите са добавяни само при прослуш
 
 | ID | Език | Какво е казано | WAV | s | RMS | SHA256 |
 | --- | --- | --- | --- | ---: | ---: | --- |
-| BG01 | BG | Аурора, намали силата на звука до двадесет процента. | `BG01_7950771aedde4140805d0ae430913263.wav` | 5.50 | 0.03423636 | `04d515d14357be54142f5c218cc862714e1d0e4edab75d8bdf92a847f3a9261` |
+| BG01 | BG | Аурора, намали силата на звука до двадесет процента. | `BG01_7950771aedde4140805d0ae430913263.wav` | 5.50 | 0.03423636 | `04d515d14357be54142f5c218cc862714e1d0e4edeb946378fa2433a5f0a5689` |
 | BG02 | BG | Аурора, увеличи силата на звука до шестдесет процента. | `BG02_44ba8b29e70240d681ee58fbba162427.wav` | 5.90 | 0.03199894 | `b7a2918dfc3562af939b30159e8fd6683b611f033b12a752d13741c8b9896ed0` |
 | BG03 | BG | Аурора, включи малката лампа до дивана. | `BG03_34ec6f4c0c3d4076b93606c3523c32a0.wav` | 5.20 | 0.04053264 | `3f1dc3128b0615d456bbb6f7781b4e138f1e16f859b57b75b785f5b7b56a96a1` |
 | BG04 | BG | Аурора, изключи осветлението над масата. | `BG04_c4362c64e14048289f8e45db3547b831.wav` | 5.20 | 0.03945600 | `c248f4d347c849784b0981522bb95ee49d7e22d9506a9e53e1d6d368d6487a59` |
@@ -29,7 +29,7 @@ Playback сигналите са добавяни само при прослуш
 | MX01 | MIXED | Аурора, пусни Here Comes the Sun в Spotify. | `MX01_84cc478d01704eb8a8a76ae0b8cbecdf.wav` | 5.50 | 0.04050585 | `b737a601bb59dab65ae3fbb766fc874dd8c6c1967cf4bc088de505c23ff76364` |
 | MX02 | MIXED | Аурора, потърси live concert на Pink Floyd. | `MX02_6e0cb4d1aed04cb7ba3ece745f095dc0.wav` | 7.10 | 0.03501548 | `a9486f5a149021e40fd78f3cbb6c643d5ea405ed45d09692361ad797c7e5f136` |
 | MX03 | MIXED | Аурора, намали звука, then pause the music. | `MX03_5773bc66c29545b492010e65bb9a4dc1.wav` | 6.20 | 0.04209358 | `d6ce88417a33c27d576b1f3932d0310822fa7893eef7594b95dfe9d1694c1443` |
-| MX04 | MIXED | Аурора, включи лампата, but keep the music playing. | `MX04_9ee8f99c056c476b96bd695a0c62c89c.wav` | 5.80 | 0.03674410 | `ac976ca04b2799f4fb6b146c4be110f1e22130b51ed31b96a67670603604886d` |
+| MX04 | MIXED | Аурора, включи лампата, but keep the music playing. | `MX04_7aa64ae5011146459513bf250fdd41de.wav` | 5.80 | 0.03674410 | `039f2b050f7d22b75ae0ab9078b245f826f8e83a88d1ffc56addc7125f342f35` |
 | MX05 | MIXED | Aurora, play the song Хубава си, моя горо. | `MX05_08930a1eb736490fae01901a52563a1d.wav` | 6.10 | 0.03950121 | `4110dbe36e1727280b5730a80221d7c0ed1b74aafaf3a4b64c02fb8cdfb1c703` |
 | MX06 | MIXED | Aurora, search for българска народна музика. | `MX06_15969fc1f86142dcaf7224157b25ae46.wav` | 6.30 | 0.03814675 | `1ffcba37f39aff3cba746ab6bffe192669d446b457bd862e8335af0d3833a14d` |
 | MX07 | MIXED | Aurora, pause the music, после изключи лампата. | `MX07_7c36abcfc9b347d8b0c80afdfe4cd362.wav` | 6.20 | 0.03821496 | `1435f883f08a453febcc0b63cc202caeb374a3fa63f6e7f29601d0499f6de0cd` |

@@ -1,6 +1,19 @@
 # Smart voice home — EVIDENCE MAP
 Updated: 2026-09-25
 
+[STT_SCHEMES_AUDIT.md](STT_SCHEMES_AUDIT.md) и
+[HISTORY_SCHEMES_INDEX.md](HISTORY_SCHEMES_INDEX.md): тематичен прочит и
+автоматичен индекс на текстови схеми. Изображения, представени само с име
+в лога, остават непроверени; индексът не доказва ръчен одит на всеки блок.
+
+[STT_HISTORY_MECHANISMS_AUDIT.md](STT_HISTORY_MECHANISMS_AUDIT.md) добавя
+точни исторически участъци за LM/grammar/context/candidate механизмите и
+статична съпоставка с интерфейсите, capture и lifecycle слоя.
+
+За STT/MIXED започни с [STT_HISTORY_CHECKPOINT.md](STT_HISTORY_CHECKPOINT.md).
+Съдържа тематична карта с редове от първичния лог, корекции и отворени
+следи. Това е частичен одит; не заменя първичните резултати.
+
 ## Primary historical source
 `VoiceAssistant_ChatLOG.txt`
 - 101,106 lines.
@@ -85,6 +98,10 @@ Weak:
 - assistant prose saying a test/result existed without independent artifact.
 
 ## Evidence rules
+
+Canary: VoiceAssistant_ChatLOG.txt:28548–28629 съдържа BG+EN резултати
+за test_001–005; benchmark_canary_bg_en.py е наличен. Вж.
+[MIXED_WHISPER_MODES.md](MIXED_WHISPER_MODES.md) за числа и ограничения.
 - File existence ≠ production integration.
 - Diagnostic script ≠ successful measured result unless output/result is preserved.
 - Calibration set ≠ independent validation.

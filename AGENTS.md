@@ -27,6 +27,11 @@ TTS, local conversational AI и Web Admin са целеви компоненти
 6. [PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md) — завършени етапи и диагностики.
 
 За аудио/STT задачи прочети и [AUDIO_DATASETS.md](docs/AUDIO_DATASETS.md).
+Преди предложение за STT/MIXED тест, нов модел или routing промяна прочети
+[STT_HISTORY_CHECKPOINT.md](docs/STT_HISTORY_CHECKPOINT.md). Провери дали
+подходът вече е изследван, върху кой набор и с какъв резултат. Посочи какъв
+нов въпрос ще реши повторението. Отворените исторически следи в справочника
+не са готова архитектура и не са разрешение за реализация.
 За проверка на доказателства и исторически контекст използвай
 [EVIDENCE_MAP.md](docs/EVIDENCE_MAP.md) и при нужда
 [пълната реконструкция](docs/Smart_voice_home_FULL_LOG_RECONSTRUCTION.md).
