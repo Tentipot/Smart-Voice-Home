@@ -25,7 +25,7 @@ from app.speech.stt.whisper_engine import WhisperSttEngine
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_DATA = ROOT / "data" / "stt_validation" / "pilot_01"
-DEFAULT_OUTPUT = ROOT / "reports" / "stt_validation" / "pilot_01_results.jsonl"
+DEFAULT_OUTPUT = ROOT / "docs" / "STT_VALIDATION_PILOT_01_RESULTS.jsonl"
 
 
 def accepted_cases(data_root: Path):
