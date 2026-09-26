@@ -36,7 +36,7 @@ Updated: 2026-09-26
 | D031 | User-authorized bounded post-STT review: preserve evidence, exact single-command grammar, clarify unresolved/conflicting candidates, no execution authorization | IMPLEMENTED LIMITED V1 — 2026-09-26; see SEMANTIC_REVIEW_V1.md |
 | D032 | Project memory is maintained in files, not in chat length: after each completed stage or new explicit user decision, update DECISION_REGISTER / PROJECT_STATE / OPEN_QUESTIONS (and CHATLOG_FULL_READ_2026-09-26.md for log-derived findings) | CURRENT — user decision 2026-09-26 |
 | D033 | Wake word and command are spoken as one phrase without pause; two-step "Аурора" → "Да?" → command was considered and rejected (log L77723–77751) | CURRENT — recovered from ChatLOG |
-| D034 | No additional model only for the wake word; use the existing models (log L74303–74307) | CURRENT — recovered from ChatLOG; current AuroraCapture still loads its own Whisper fp16 instance, see CHATLOG_FULL_READ_2026-09-26.md §1 |
+| D034 | ~~No additional model only for the wake word; use the existing models (log L74303–74307)~~ | SUPERSEDED — user decision 2026-09-26: no longer valid; a dedicated or different wake mechanism/model is allowed, and larger rework of the program is acceptable if needed |
 | D035 | Typical mixed speech = Bulgarian command + foreign brand/artist/song/film names, not full clause switching (log L43413–43506, newer than L29290) | CURRENT — recovered from ChatLOG |
 
 ## Superseded / rejected assumptions
@@ -51,3 +51,4 @@ aggregate evidence, not the deferred SttCandidate design or a new MIXED policy.
 - CTC necessarily resident on GPU — superseded by later CPU/RAM diagnostic composition.
 - Local conversational AI fixed to CPU-only — not final; benchmark-driven.
 - Android `base.en-q5_1` as sufficient universal open-vocabulary STT — superseded by server-STT direction.
+- "No additional model only for the wake word" (D034, log L74303) — declared invalid by the user on 2026-09-26.

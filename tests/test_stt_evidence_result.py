@@ -60,15 +60,20 @@ class EvidenceResultTests(unittest.TestCase):
         report = service.transcribe_with_evidence(TEST_AUDIO_PATH)
         caller = Mock()
         caller.transcribe_with_evidence.return_value = report
-        probes = [Mock(spec=['last_seconds'], last_seconds=t)
-                  for t in (0.1, 0.01, 0.2)]
+        manager = Mock(spec=['is_loaded', 'active_leases'])
+        manager.is_loaded.return_value = True
+        manager.active_leases.return_value = 0
         case = dict(audio=ROOT / 'fake_audio.wav', attempt_id='one',
                     sha256='test', prompt_id='MX01', speech_label='MIXED',
                     reference_text='ROUTED-MIXED')
-        with patch('tools.validation.run_stt_validation.synchronize'), patch(
+        with patch(
             'tools.validation.run_stt_validation.get_gpu_status', return_value={}
         ):
-            row = run_case(case, caller, probes)
+            row = run_case(case, caller, manager)
+        self.assertEqual(
+            row['resource_state_after']['whisper_large_v3'],
+            {'loaded': True, 'leases': 0},
+        )
         self.assertEqual(row['entropy_delta'], evidence.entropy_delta)
         self.assertEqual(row['resolution_reason'], report.resolution.reason)
         self.assertEqual(row['text'], report.result.text)

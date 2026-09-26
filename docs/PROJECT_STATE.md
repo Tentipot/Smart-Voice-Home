@@ -1,9 +1,16 @@
 # Smart voice home — PROJECT STATE
 Updated: 2026-09-26
 Пълен прочит на ChatLOG (2026-09-26): [CHATLOG_FULL_READ_2026-09-26.md](CHATLOG_FULL_READ_2026-09-26.md).
-Водеща отворена хипотеза: живата латентност 9–13 s вероятно идва от препълнена
-VRAM — AuroraCapture държи собствен Whisper fp16 до production Whisper int8 и Buzz
-(~10 GB при 8 GB). Не е проверено с NVML по време на живия тест. Правило D032:
+Диагностично проверено 2026-09-26 (`tools/diagnostics/diagnose_vram_residency.py`,
+[отчет](VRAM_RESIDENCY_20260926T153857Z.jsonl), 8 pilot_01 WAV, без микрофон):
+вторият Whisper fp16 на AuroraCapture препълва VRAM (8015/8192 MB) и ~2.1 GB
+отиват в shared RAM. Команда: само production 2.6–3.2 s; + празен wake Whisper
+EN/MIXED 11.8–18.4 s (BG ~2.8 s); + едновременни wake проверки 24–63 s. Това
+обяснява живите 9–13 s. Без wake модела остават ~3 s, от които ~2 s CTC на CPU.
+Решението (напр. общ Whisper) още не е избрано. D034 е отменено от потребителя.
+Офлайн опит с вариант Б (CTC keyword spotting с BG CTC): 69/69 открити, 0/80
+фалшиви на отделната проверка; не е интегриран и няма трудни отрицателни.
+Вж. PROJECT_HISTORY.md. Правило D032:
 проектната памет се обновява след всеки етап или ново решение.
 Структура (2026-09-26): помощните скриптове са в `tools/`, тестовете в `tests/`;
 стартират се с `python -m` от корена. Вж. [tools/README.md](../tools/README.md).
