@@ -1,5 +1,18 @@
 # Smart voice home — PROJECT STATE
 Updated: 2026-09-25
+Най-ново, 2026-09-26: [Semantic Review v1](SEMANTIC_REVIEW_V1.md) е реализиран
+в app/commands и свързан със STT чрез CommandReviewService и batch runner.
+16 теста минават. Replay на 24 запазени текста: 3 parsed, 21 нужда от уточнение.
+Това е ограничена граматика/съпоставка, не подобрение на ASR, пълен semantic
+resolver или разрешение за реални действия. По-долу са предходните етапи.
+Последна реализация: 2026-09-26 — `SttService.transcribe_with_evidence()`
+връща `SttTranscription` с audio_path, SttResult, LanguageEvidence и
+LanguageResolution от едно извикване. `transcribe_file()` запазва стария
+резултат. Batch runner-ът използва този contract за evidence/route вместо
+странични last_* полета. Това реализира предаването на обобщените CTC
+доказателства след STT, не Intent/Entity Resolver. Модели, прагове и routing
+не са променени. Следващият незавършен етап е семантичната оценка.
+По-долните указания за исторически одит са предходният checkpoint.
 
 Най-нов исторически резултат: [одит на схемите](STT_SCHEMES_AUDIT.md).
 Намерено е изрично предложение CTC evidence да се използва и след STT

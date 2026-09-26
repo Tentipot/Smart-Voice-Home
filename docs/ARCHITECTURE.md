@@ -4,6 +4,20 @@
 
 Updated: 2026-09-24
 
+Command review (2026-09-26): `CommandReviewService` composes SttService and
+`SemanticReviewer` after transcription, preserving the original evidence.
+The reviewer is a bounded single-command grammar with candidate conflict
+checks, not a complete Intent/Entity Resolver. It never authorizes or executes
+actions, never treats CTC scores as semantic confidence, and leaves unresolved
+targets/queries to future integration. See SEMANTIC_REVIEW_V1.md.
+
+STT evidence contract (2026-09-26): `transcribe_with_evidence(path)` returns
+`SttTranscription` with audio_path, result, evidence and resolution from one
+CTC/routing/STT invocation. `transcribe_file()` still returns SttResult.
+This supports downstream review without a second CTC pass. It provides
+aggregate metrics, not CTC text, word alignment, semantic confidence or
+authorization. Candidate fusion and Intent/Entity Resolver remain unimplemented.
+
 
 
 ## Purpose and authority

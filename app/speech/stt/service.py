@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 
 from app.speech.stt.ctc_evidence_provider import (
@@ -12,6 +13,20 @@ from app.speech.stt.language_resolver import (
 )
 from app.speech.stt.result import SttResult
 from app.speech.stt.router import SttRouter
+
+
+@dataclass(frozen=True, slots=True)
+class SttTranscription:
+    """One transcription and its routing evidence, not an approved command.
+
+    Evidence contains aggregate acoustic metrics, not word alignment or
+    semantic confidence. All fields belong to the same service invocation.
+    """
+
+    audio_path: Path
+    result: SttResult
+    evidence: LanguageEvidence
+    resolution: LanguageResolution
 
 
 class SttService:
@@ -84,11 +99,29 @@ class SttService:
         one audio file through SttRouter.
         """
 
-        _, resolution = self.analyze_language(
+        return self.transcribe_with_evidence(audio_path).result
+
+    def transcribe_with_evidence(
+        self,
+        audio_path: Path,
+    ) -> SttTranscription:
+        """Preserve evidence for downstream review without a second CTC pass.
+
+        This does not resolve entities, validate intent or authorize actions.
+        No per-request state is retained on the service instance.
+        """
+        audio_path = Path(audio_path)
+        evidence, resolution = self.analyze_language(
             audio_path
         )
 
-        return self._router.transcribe_file(
+        result = self._router.transcribe_file(
             audio_path,
             policy=resolution.policy,
+        )
+        return SttTranscription(
+            audio_path=audio_path,
+            result=result,
+            evidence=evidence,
+            resolution=resolution,
         )

@@ -33,8 +33,14 @@ Updated: 2026-09-22
 | D028 | Speaker recognition is not the primary identity mechanism | CURRENT |
 | D029 | Local wake detection should not require continuous room audio upload | CURRENT |
 | D030 | Exact multi-device same-command arbitration remains unresolved/requires recovery/design | OPEN |
+| D031 | User-authorized bounded post-STT review: preserve evidence, exact single-command grammar, clarify unresolved/conflicting candidates, no execution authorization | IMPLEMENTED LIMITED V1 — 2026-09-26; see SEMANTIC_REVIEW_V1.md |
 
 ## Superseded / rejected assumptions
+Implementation clarification (2026-09-26, user-authorized continuation):
+the service adds `SttTranscription` through `transcribe_with_evidence()`
+while preserving the simple SttResult API. This is routing provenance and
+aggregate evidence, not the deferred SttCandidate design or a new MIXED policy.
+
 - One global Spotify account for all users — prototype only.
 - Wake word as proof of identity — rejected.
 - `Аурора` as project/assistant name — incorrect.

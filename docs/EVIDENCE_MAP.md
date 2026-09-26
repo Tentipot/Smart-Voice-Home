@@ -1,6 +1,11 @@
 # Smart voice home — EVIDENCE MAP
 Updated: 2026-09-25
 
+[SEMANTIC_REVIEW_V1.md](SEMANTIC_REVIEW_V1.md) и
+[STT_SEMANTIC_REVIEW_20260926.jsonl](STT_SEMANTIC_REVIEW_20260926.jsonl):
+реализация/тестове на ограничено второ отсяване и текстов replay. Не са
+нов ASR benchmark или доказателство за правилност на чутото.
+
 [STT_SCHEMES_AUDIT.md](STT_SCHEMES_AUDIT.md) и
 [HISTORY_SCHEMES_INDEX.md](HISTORY_SCHEMES_INDEX.md): тематичен прочит и
 автоматичен индекс на текстови схеми. Изображения, представени само с име

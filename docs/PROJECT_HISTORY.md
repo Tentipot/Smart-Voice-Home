@@ -1,5 +1,30 @@
 # Smart voice home — PROJECT HISTORY
 
+## 2026-09-26 — първо вторично отсяване след STT
+
+Добавени SemanticReviewer, CommandReviewService и review_stt_results.py;
+batch runner-ът записва автоматична review структура и отделен manual status.
+16 теста минават. Текстов replay на 24 baseline случая и съществуващите
+MIXED алтернативи: 3 parsed, 21 needs_clarification. Няма реални действия,
+нов ASR inference или промени на модели/прагове. Ограничения и доказателства:
+[SEMANTIC_REVIEW_V1.md](SEMANTIC_REVIEW_V1.md).
+
+## 2026-09-26 — предаване на доказателствата след STT
+
+По разрешение на потребителя за необходимите промени е добавен
+`SttService.transcribe_with_evidence()` → `SttTranscription`: audio_path,
+result, evidence и resolution от едно извикване. Старият `transcribe_file()`
+остава съвместим. `run_stt_validation.run_case()` използва върнатите данни,
+а probes остават за измерване на време. Не се въвеждат candidate fusion,
+semantic confidence, нови прагове, маршрути или реални действия.
+
+Проверки: четири unittest проверки в `test_stt_evidence_result.py` минават
+(трите маршрута/един CTC pass, отделни заявки/стар API, error propagation,
+runner integration без last_evidence/last_resolution). Съществуващите
+`test_stt_service.py` и `test_stt_router.py` също минават с fake engines.
+Няма моделно зареждане, микрофон или нов benchmark. `git diff --check` минава.
+Това доказва contract-а, не повишение на ASR точността или готов semantic resolver.
+
 ## 2026-09-25 — одит на историческите схеми
 
 В STT_SCHEMES_AUDIT.md е проследено повторното използване на CTC evidence

@@ -3,6 +3,16 @@ Updated: 2026-09-23
 
 These are intentionally unresolved. Do not silently invent answers.
 
+2026-09-26: [Semantic Review v1](SEMANTIC_REVIEW_V1.md) вече проверява
+ограничени единични команди и противоречиви кандидати. Остават широк езиков
+обхват, entity resolution, акустична проверка и контекст. parsed не е
+изпълнима/разрешена команда; всички can_execute стойности са false.
+
+2026-09-26: aggregate evidence и resolution вече се предават с STT резултата
+чрез `transcribe_with_evidence()`. Остават semantic review, CTC текстови и
+времеви evidence, candidate selection и независима валидация. Новото API
+не доказва подобрена точност на разпознаването.
+
 Допълнително възстановени механизми и оставащи неизвестни:
 [STT_HISTORY_MECHANISMS_AUDIT.md](STT_HISTORY_MECHANISMS_AUDIT.md).
 CTC+LM, grammar/context и каскадните предложения не са потвърдени като

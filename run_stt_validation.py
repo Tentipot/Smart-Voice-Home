@@ -4,6 +4,7 @@ This runner reports measurements only. It does not parse or execute commands.
 """
 
 import argparse
+from app.commands.semantic_review import SemanticReviewer
 import json
 import os
 import time
@@ -137,21 +138,23 @@ def run_case(case, service, probes):
     evidence, resolver, router = probes
     synchronize()
     started = time.perf_counter()
-    result = service.transcribe_file(case["audio"])
+    transcription = service.transcribe_with_evidence(case["audio"])
+    result = transcription.result
     synchronize()
     elapsed = time.perf_counter() - started
     return {
         "attempt_id": case["attempt_id"],
         "sha256": case["sha256"],
         "status": "ok",
-        "ctc": asdict(evidence.last_evidence),
-        "entropy_delta": evidence.last_evidence.entropy_delta,
-        "route": resolver.last_resolution.policy.mode.value,
-        "resolution_reason": resolver.last_resolution.reason,
+        "ctc": asdict(transcription.evidence),
+        "entropy_delta": transcription.evidence.entropy_delta,
+        "route": transcription.resolution.policy.mode.value,
+        "resolution_reason": transcription.resolution.reason,
         "timings": {"ctc": evidence.last_seconds, "resolver": resolver.last_seconds, "stt": router.last_seconds},
         "gpu_after": get_gpu_status(),
         "word_error": word_errors(case["reference_text"], result.text),
-        "semantic_review": "pending_manual_review",
+        "semantic_review": asdict(SemanticReviewer().review(result.text)),
+        "reference_semantic_review": "pending_manual_review",
         "prompt_id": case["prompt_id"],
         "speech_label": case["speech_label"],
         "reference_text": case["reference_text"],
