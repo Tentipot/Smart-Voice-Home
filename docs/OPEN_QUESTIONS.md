@@ -1,5 +1,5 @@
 # Smart voice home — OPEN QUESTIONS
-Updated: 2026-09-23
+Updated: 2026-09-26
 
 These are intentionally unresolved. Do not silently invent answers.
 
@@ -101,3 +101,17 @@ smoothing / STT candidates са обсъждани, проверени, одоб
     Следва анализ без автоматична промяна на праговете. Необходими са
     пълен ръчен semantic checklist, model revisions/dependency snapshot
     и проверка на offline режима извън batch runner-а.
+
+30. Живата латентност 9–13 s: дали причината е препълнена VRAM, защото
+    AuroraCapture зарежда собствен Whisper large-v3 fp16 (~3.8 GB) до
+    production Whisper int8 (~2 GB) и Buzz (~3.2 GB). Нужно е NVML замерване
+    по време на живия тест. Вж. CHATLOG_FULL_READ_2026-09-26.md §1 и D034.
+
+31. MIXED маршрут: сегашното MIXED → Whisper AUTO е предложение на
+    асистента (ChatLOG L97416). Потребителското правило L47599 е „не е
+    английски → български“. Кое важи — решава потребителят.
+
+32. Трите STT модела на GPU не са опитвани реално (тестът спира от
+    собствения си праг, ChatLOG L69997). Възможно освобождаване на VRAM чрез
+    CTranslate2 int8 версия на BuzzASR (архитектура Whisper large-v3) не е
+    тествано.
