@@ -5,6 +5,8 @@ Updated: 2026-09-26
 VRAM — AuroraCapture държи собствен Whisper fp16 до production Whisper int8 и Buzz
 (~10 GB при 8 GB). Не е проверено с NVML по време на живия тест. Правило D032:
 проектната памет се обновява след всеки етап или ново решение.
+Структура (2026-09-26): помощните скриптове са в `tools/`, тестовете в `tests/`;
+стартират се с `python -m` от корена. Вж. [tools/README.md](../tools/README.md).
 Най-ново, 2026-09-26: [Semantic Review v1](SEMANTIC_REVIEW_V1.md) е реализиран
 в app/commands и свързан със STT чрез CommandReviewService и batch runner.
 16 теста минават. Replay на 24 запазени текста: 3 parsed, 21 нужда от уточнение.

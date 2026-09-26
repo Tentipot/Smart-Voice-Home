@@ -72,8 +72,8 @@ temporal smoothing, сравнение спрямо локален baseline, н�
 
 ## Какво действително има в кода
 
-- [segment mixed тест](../benchmark_ctc_segment_mixed.py) и
-  [segment validation тест](../benchmark_ctc_segment_validation_051_060.py)
+- [segment mixed тест](../tools/benchmarks/benchmark_ctc_segment_mixed.py) и
+  [segment validation тест](../tools/benchmarks/benchmark_ctc_segment_validation_051_060.py)
   изследват 16 относителни времеви участъка; не са production word router.
 - [LanguageResolver](../app/speech/stt/language_resolver.py) има
   `resolve_detected_language()` със сродни езици → BG. Основният

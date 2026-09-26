@@ -1,5 +1,28 @@
 # Smart voice home — PROJECT HISTORY
 
+## 2026-09-26 — подредба на скриптовете и премахнат VoxLingua
+
+По изрично искане на потребителя 80-те Python скрипта от корена са преместени
+с `git mv` в `tools/{validation,datasets,analysis,diagnostics,benchmarks}` и
+`tests/` (вж. [tools/README.md](../tools/README.md)). Променени са само
+импортите между скриптовете, `mock.patch` целите и `Path(__file__)` корените
+(`parents[2]`); логиката не е пипана. Стартиране: `python -m tools.<папка>.<скрипт>`.
+Отхвърленият VoxLingua LID модел (`models/lid-voxlingua107-ecapa` и HF кеша му,
+~82 MB) е изпратен в Recycle Bin; production кодът не го използва.
+По решение на потребителя в Recycle Bin са изпратени и HF кешовете на старите
+кандидати Canary 1B v2 (6.0 GB), Parakeet TDT 0.6B v3 (2.4 GB),
+Distil-large-v3.5 (2.9 GB) и faster-whisper large-v3 turbo (1.6 GB). Използват
+ги само исторически скриптове в `tools/benchmarks/`; при повторен тест ще се
+изтеглят отново. Мястото се освобождава едва след изпразване на кошчето.
+WAV файловете остават непроменени (решение на потребителя).
+
+Проверки: `compileall` на `app/`, `tools/`, `tests/` минава; 24 от 25 unittest
+минават, плюс fake тестовете за ModelHandle, ModelManager, concurrency, router и
+SttService. `collect_stt_validation --list` и `review_stt_results --help` работят.
+Неуспешен: `test_runner_uses_returned_evidence` — patch-ва несъществуващото
+`run_stt_validation.synchronize`; пада и върху кода от commit 52a1ef3, т.е. не е
+от преместването. Записът по-долу за „четири минаващи проверки“ е остарял.
+
 ## 2026-09-26 — първо вторично отсяване след STT
 
 Добавени SemanticReviewer, CommandReviewService и review_stt_results.py;

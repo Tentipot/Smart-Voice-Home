@@ -151,7 +151,7 @@ CTC CPU/float32, Buzz GPU, Whisper large-v3 GPU/int8_float16;
 Преглед без микрофон/модели:
 
 ```powershell
-.\.venv\Scripts\python.exe -B collect_stt_validation.py --list
+.\.venv\Scripts\python.exe -B -m tools.validation.collect_stt_validation --list
 ```
 
 Първа жива проверка с една фраза, когато говорителят е готов
@@ -159,7 +159,7 @@ CTC CPU/float32, Buzz GPU, Whisper large-v3 GPU/int8_float16;
 от PROJECT_STATE.md остава необходим според средата):
 
 ```powershell
-.\.venv\Scripts\python.exe -B collect_stt_validation.py --device 1 --speaker stan --environment "тиха стая" --start BG01 --count 1
+.\.venv\Scripts\python.exe -B -m tools.validation.collect_stt_validation --device 1 --speaker stan --environment "тиха стая" --start BG01 --count 1
 ```
 
 Enter започва един опит. След автоматична пауза и прослушване:

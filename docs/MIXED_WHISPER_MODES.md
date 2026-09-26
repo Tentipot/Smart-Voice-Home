@@ -42,7 +42,7 @@ Forced EN запазва някои английски части, но прев
 temperature=0, condition_on_previous_text=False, vad_filter=False.
 Файловете и референциите са проверени срещу baseline чрез SHA256/attempt_id.
 Мрежовите проверки са изключени; NVIDIA DLL PATH обходът е приложен.
-Скрипт: compare_mixed_whisper.py --mode bg|en|multilingual --output <нов файл>.
+Скрипт: python -m tools.validation.compare_mixed_whisper --mode bg|en|multilingual --output <нов файл>.
 Диагностиката използва underlying WhisperModel, без промяна на production engine.
 
 Сурови данни: [BG](MIXED_WHISPER_bg.jsonl), [EN](MIXED_WHISPER_en.jsonl),

@@ -107,6 +107,34 @@ The precise prompt and validated expected transcript of each recording
 must be recovered from the relevant benchmark scripts or historical
 results before it is used for a new quality comparison.
 
+Prompt sources recovered 2026-09-26 (scripts, not re-listened audio):
+
+| Files | Groups | Prompt list | Recording |
+| --- | --- | --- | --- |
+| `test_001`–`test_030` | 10 BG, 10 EN, 10 BG+EN | `TESTS` in `tools/benchmarks/benchmark_whisper_large_v3_accuracy.py` (same in `tools/datasets/rerecord_test_audio.py`) | fixed 8.00 s windows with ~4–5 s trailing silence (ChatLOG L29440–29715); may have been re-recorded |
+| `test_031`–`test_060` | 10 BG, 10 EN, 10 MIXED = BG command + foreign entity | `TESTS` in `tools/benchmarks/benchmark_stt_validation_031_060.py`; 051–060 also in `benchmark_ctc_segment_validation_051_060.py` | manual start/stop, 2.1–6.0 s |
+| `test_061`–`test_080` | 10 BG, 10 EN | `TESTS` in `tools/datasets/record_validation_audio.py` | manual start/stop, 2.0–3.8 s |
+| `diagnostic_32s.wav` | — | synthetic: `test_001` repeated 4× (ChatLOG L68089) | VRAM test only; not for accuracy |
+
+User listening check (ChatLOG L63115–63171): 021 and 051 are a BG command with
+EN artist/song names; other files in the 021–030 group may mix more.
+Known examples: 031 = „Намали звука на тридесет процента“, 041 = "Set the
+volume to 40%".
+
+## 4a. wakeword_gpu content (from filenames and ChatLOG, 2026-09-26)
+
+`data/command_capture/wakeword_gpu/` (90 files, 12.7 MB, 2026-09-21..22):
+44 `window_*` and 27 `wake_window_*` (wake-detection windows),
+4 `_wake_*` temporary files, 2 `command_*`, 2 `command_vad_*`,
+2 `wake_phrase_*`, 9 `command_full_*`. The user judged the 9 `command_full_*`
+files unusable for calibration (noise, several commands, one 67 s artifact of a
+block-size bug; ChatLOG L88111–88115). `command_full_20260922_124403_026821.wav`
+is evidence for the finding CTC → EN (+0.009427) while Buzz returned
+„Аурора намали звука“ (ChatLOG L80633–80961).
+
+Total size of all project WAV files on 2026-09-26: ~39 MB (253 files).
+Deleting diagnostic WAVs frees almost no disk space.
+
 ## 6. Preservation and future recording policy
 
 For every new test dataset, record:

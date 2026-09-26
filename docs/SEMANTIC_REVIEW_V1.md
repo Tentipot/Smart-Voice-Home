@@ -48,7 +48,7 @@ contract/runner и 2 съществуващи за WER/manifest. Те включ
 Възпроизводима текстова проверка, без модели и нова обработка на WAV:
 
 ```powershell
-.\.venv\Scripts\python.exe -B review_stt_results.py --input docs/STT_VALIDATION_PILOT_01_DIAGNOSTICS.jsonl --alternatives docs/MIXED_WHISPER_AUTO_COMPARISON.jsonl docs/MIXED_WHISPER_bg.jsonl docs/MIXED_WHISPER_en.jsonl docs/MIXED_WHISPER_multilingual.jsonl --output docs/STT_SEMANTIC_REVIEW_20260926.jsonl
+.\.venv\Scripts\python.exe -B -m tools.validation.review_stt_results --input docs/STT_VALIDATION_PILOT_01_DIAGNOSTICS.jsonl --alternatives docs/MIXED_WHISPER_AUTO_COMPARISON.jsonl docs/MIXED_WHISPER_bg.jsonl docs/MIXED_WHISPER_en.jsonl docs/MIXED_WHISPER_multilingual.jsonl --output docs/STT_SEMANTIC_REVIEW_20260926.jsonl
 ```
 
 Изходът се създава изключително; за повторение посочи ново име. Проверяват
