@@ -1,5 +1,24 @@
 # Smart voice home — PROJECT HISTORY
 
+## 2026-09-26/27 — CTC wake детектор вграден в AuroraCapture
+
+По одобрение на потребителя: нов модул `app/speech/capture/wake_detector.py` с
+`CtcWakeDetector` (BG CTC keyword spotting, CPU float32, думи „аурора“/„орора“/
+„аврора“, праг 2.08) и `WhisperWakeDetector` (досегашното поведение, резервно).
+AuroraCapture приема `wake_detector=` и по подразбиране ползва CTC;
+`SMART_VOICE_WAKE_DETECTOR=whisper` връща стария Whisper. Wake проверката вече
+не зарежда втори Whisper large-v3 fp16 на GPU. VAD, prefix проверките,
+pause/resume и `CapturedPhrase` не са променени; `wake_text` вече съдържа
+„<дума> score=<оценка>“ вместо Whisper текст.
+
+Проверки: 34/34 unittest (нови: keyword_deficit, CtcWakeDetector, доставяне и
+отхвърляне през wake worker-а). `tools/diagnostics/diagnose_wake_replay.py`
+подава WAV блокове по 100 ms в реално време през истинския AuroraCapture път:
+24/24 pilot_01 фрази доставени, 0/20 фалшиви (test_061–080); 1–2 wake проверки
+на фраза с „Аурора“, ~0.3–0.6 s на проверка на CPU
+([отчет](WAKE_REPLAY_20260926T205001Z.jsonl)). Ограничения: без микрофон и без
+трудни отрицателни; живият тест с потребителя предстои.
+
 ## 2026-09-26 — wake чрез CTC keyword spotting (вариант Б), офлайн опит
 
 Потребителят обяви D034 („без нов модел за wake“) за невалидно и поиска опит с

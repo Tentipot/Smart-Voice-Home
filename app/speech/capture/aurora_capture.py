@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import queue
-import re
 import threading
 import time
-import unicodedata
 from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -15,7 +13,14 @@ import sounddevice as sd
 import soundfile as sf
 import webrtcvad
 
-from app.speech.stt.whisper_engine import WhisperSttEngine
+from app.speech.capture.wake_detector import (
+    WAKE_PREFIXES,
+    WAKE_WORDS,
+    WakeDetector,
+    contains_wake,
+    create_wake_detector,
+    normalize_text,
+)
 
 
 SAMPLE_RATE = 16000
@@ -38,49 +43,6 @@ WAKE_CHECK_INTERVAL_SECONDS = 0.5
 MIN_WAKE_AUDIO_SECONDS = 1.5
 MAX_WAKE_PREFIX_SECONDS = 4.0
 WAKE_RMS_THRESHOLD = 0.008
-
-WAKE_WORDS = {
-    "аурора",
-    "aurora",
-    "أورورا",
-    "أرور",
-    "أورور",
-}
-
-WAKE_PREFIXES = (
-    "аурора",
-    "aurora",
-)
-
-
-def normalize_text(text: str) -> str:
-    text = unicodedata.normalize(
-        "NFKC",
-        text,
-    ).casefold()
-
-    return re.sub(
-        r"[^\w]+",
-        " ",
-        text,
-        flags=re.UNICODE,
-    ).strip()
-
-
-def contains_wake(text: str) -> bool:
-    words = normalize_text(text).split()
-
-    if any(
-        word in WAKE_WORDS
-        for word in words
-    ):
-        return True
-
-    return any(
-        word.startswith(WAKE_PREFIXES)
-        for word in words
-    )
-
 
 def pcm_sample_count(audio: bytes) -> int:
     return len(audio) // 2
@@ -220,6 +182,7 @@ class _WakeResult:
     text: str
     language: str
     elapsed: float
+    detected: bool = False
     error: str = ""
 
 
@@ -234,6 +197,7 @@ class AuroraCapture:
         ]
         | None = None,
         verbose: bool = True,
+        wake_detector: WakeDetector | None = None,
     ) -> None:
         self.device = device
         self.on_phrase = on_phrase
@@ -254,11 +218,11 @@ class AuroraCapture:
         self.stop_event = threading.Event()
         self.pause_event = threading.Event()
 
-        self.whisper = WhisperSttEngine(
-            model_name="large-v3",
-            device="cuda",
-            compute_type="float16",
-            beam_size=1,
+        # CTC keyword spotting by default; Whisper remains available
+        # through SMART_VOICE_WAKE_DETECTOR=whisper.
+        self.wake_detector = (
+            wake_detector
+            or create_wake_detector()
         )
 
         self.vad = webrtcvad.Vad(1)
@@ -484,16 +448,6 @@ class AuroraCapture:
         return True
 
     def wake_worker(self) -> None:
-        temp_dir = Path(
-            "data/command_capture/"
-            "_aurora_wake_temp"
-        )
-
-        temp_dir.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-
         while not self.stop_event.is_set():
             try:
                 job = self.wake_queue.get(
@@ -503,26 +457,12 @@ class AuroraCapture:
             except queue.Empty:
                 continue
 
-            temp_path = (
-                temp_dir
-                / (
-                    f"wake_{job.phrase_id}_"
-                    f"{time.monotonic_ns()}.wav"
-                )
-            )
-
             started = time.perf_counter()
 
             try:
-                save_blocks_wav(
-                    temp_path,
-                    job.blocks,
-                )
-
-                result = (
-                    self.whisper.transcribe_file(
-                        temp_path,
-                        language=None,
+                decision = self.wake_detector.detect(
+                    pcm_to_float(
+                        b"".join(job.blocks)
                     )
                 )
 
@@ -530,12 +470,13 @@ class AuroraCapture:
                     _WakeResult(
                         phrase_id=job.phrase_id,
                         is_final=job.is_final,
-                        text=result.text,
-                        language=result.language,
+                        text=decision.text,
+                        language=decision.language,
                         elapsed=(
                             time.perf_counter()
                             - started
                         ),
+                        detected=decision.detected,
                     )
                 )
 
@@ -558,14 +499,6 @@ class AuroraCapture:
                 )
 
             finally:
-                try:
-                    temp_path.unlink(
-                        missing_ok=True
-                    )
-
-                except OSError:
-                    pass
-
                 self.wake_queue.task_done()
 
     def deliver_phrase(
@@ -649,12 +582,10 @@ class AuroraCapture:
                 )
 
             else:
-                detected = contains_wake(
-                    result.text
-                )
+                detected = result.detected
 
                 self.log(
-                    "[WAKE ASR] "
+                    f"[WAKE {self.wake_detector.name.upper()}] "
                     f"phrase={result.phrase_id} "
                     f"final={result.is_final} "
                     f"text={result.text!r} "
@@ -1062,8 +993,8 @@ class AuroraCapture:
 
     def run(self) -> None:
         self.log(
-            "Loading Whisper large-v3 "
-            "for Aurora wake detection..."
+            "Wake detector: "
+            f"{self.wake_detector.name}"
         )
 
         worker = threading.Thread(

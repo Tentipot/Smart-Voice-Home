@@ -40,6 +40,7 @@ import numpy as np
 import torch
 from transformers import AutoModelForCTC, Wav2Vec2FeatureExtractor, Wav2Vec2CTCTokenizer
 
+from app.speech.capture.wake_detector import keyword_deficit
 from tools.diagnostics.diagnose_vram_residency import first_accepted_cases
 
 
@@ -79,33 +80,6 @@ class CtcScorer:
     def token_ids(self, keyword: str) -> list[int]:
         vocab = self.tokenizer.get_vocab()
         return [vocab[char] for char in keyword]
-
-
-def keyword_deficit(log_probs: np.ndarray, tokens: list[int], blank: int) -> float:
-    """Minimum per-token deficit of a CTC keyword alignment with free start/end."""
-    deficits = log_probs.max(axis=1, keepdims=True) - log_probs  # >= 0
-    labels = [blank]
-    for token in tokens:
-        labels += [token, blank]
-    states = len(labels)
-    cost = deficits[:, labels]  # T x S
-
-    best = np.inf
-    previous = np.full(states, np.inf)
-    for frame in range(cost.shape[0]):
-        current = np.full(states, np.inf)
-        for state in range(states):
-            candidates = [previous[state]]
-            if state >= 1:
-                candidates.append(previous[state - 1])
-            if state >= 2 and labels[state] != blank and labels[state] != labels[state - 2]:
-                candidates.append(previous[state - 2])
-            if state <= 1:
-                candidates.append(0.0)  # free start
-            current[state] = min(candidates) + cost[frame, state]
-        best = min(best, current[-1], current[-2])  # free end
-        previous = current
-    return float(best) / len(tokens)
 
 
 def collect_files() -> list[dict]:

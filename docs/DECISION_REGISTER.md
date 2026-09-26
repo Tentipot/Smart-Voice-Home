@@ -38,6 +38,7 @@ Updated: 2026-09-26
 | D033 | Wake word and command are spoken as one phrase without pause; two-step "Аурора" → "Да?" → command was considered and rejected (log L77723–77751) | CURRENT — recovered from ChatLOG |
 | D034 | ~~No additional model only for the wake word; use the existing models (log L74303–74307)~~ | SUPERSEDED — user decision 2026-09-26: no longer valid; a dedicated or different wake mechanism/model is allowed, and larger rework of the program is acceptable if needed |
 | D035 | Typical mixed speech = Bulgarian command + foreign brand/artist/song/film names, not full clause switching (log L43413–43506, newer than L29290) | CURRENT — recovered from ChatLOG |
+| D036 | Wake detection default: CTC keyword spotting with the BG CTC model on CPU; Whisper wake kept as switchable fallback (SMART_VOICE_WAKE_DETECTOR) | IMPLEMENTED — user approval 2026-09-26; offline replay only, live validation pending |
 
 ## Superseded / rejected assumptions
 Implementation clarification (2026-09-26, user-authorized continuation):
